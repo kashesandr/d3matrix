@@ -1,0 +1,7 @@
+.chart.matrix {
+  fill: transparent;
+}
+.chart.matrix .cell {
+  stroke: #000;
+  stroke-width: 1px;
+}
