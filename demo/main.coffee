@@ -1,12 +1,14 @@
 el = d3.select('#matrix svg')
 
-onCellClick = (e, d)-> console.log 'click', e, d
-onMouseOver = (e, d)-> console.log 'mouseOver', e,d
-onMouseOut = (e, d)-> console.log 'mouseOut', e,d
+onCellClick = (d)-> console.log 'click', d
+onCellDblClick = (d)-> console.log 'dblclick', d
+onMouseOver = (d)-> console.log 'mouseOver', d
+onMouseOut = (d)-> console.log 'mouseOut', d
 
 matrix = window.Matrix()
 matrix.dispatch
     .on('cellClick', onCellClick)
+    .on('cellDblClick', onCellDblClick)
     .on('cellMouseOver', onMouseOver)
     .on('cellMouseOut', onMouseOut)
 

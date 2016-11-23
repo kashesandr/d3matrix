@@ -13,14 +13,14 @@ window.Matrix = function() {
   getCellColor = function() {
     return '#ffffff';
   };
-  xScale = d3.scale.ordinal();
-  yScale = d3.scale.ordinal();
+  xScale = d3.scaleBand();
+  yScale = d3.scaleBand();
   dispatch = d3.dispatch('renderEnd', 'cellClick', 'cellDblClick', 'cellMouseOver', 'cellMouseOut');
   transitionDuration = 500;
   noData = 'No data provided.';
   chart = function(selection) {
     return selection.each(function(data) {
-      var _getY, availableHeight, availableWidth, backgroundWrap, cell, cellHeight, cellWidth, cellsWrap, container, g, gEnter, getCellX, getCellY, noDataText, range, sideLength, wrap;
+      var _getY, availableHeight, availableWidth, backgroundWrap, cell, cellHeight, cellWidth, cellsWrap, container, getCellX, getCellY, noDataText, range, sideLength, wrap;
       container = d3.select(this);
       chart.container = this;
       chart.update = function() {
@@ -52,10 +52,11 @@ window.Matrix = function() {
       };
       availableWidth = (width || parseInt(container.style('width')) || 400) - margin.left - margin.right;
       availableHeight = (height || parseInt(container.style('height')) || 400) - margin.top - margin.bottom;
-      xScale.rangeBands([0, availableWidth]).domain(range);
-      yScale.rangeBands([0, availableHeight]).domain(range);
-      cellHeight = yScale.rangeBand();
-      cellWidth = xScale.rangeBand();
+      container.attr('height', availableHeight + margin.top + margin.bottom).attr('width', availableWidth + margin.left + margin.right);
+      xScale.rangeRound([0, availableWidth]).domain(range);
+      yScale.rangeRound([0, availableHeight]).domain(range);
+      cellHeight = yScale.bandwidth();
+      cellWidth = xScale.bandwidth();
       if (data != null ? data.length : void 0) {
         container.selectAll('.noData').remove();
       } else {
@@ -67,51 +68,21 @@ window.Matrix = function() {
         });
         return chart;
       }
-      wrap = container.selectAll('g.matrix').data([data]);
-      gEnter = wrap.enter().append('g').attr('class', 'wrapper matrix chart').append('g');
-      g = wrap.select('g');
-      gEnter.append('rect').attr('class', 'background');
-      gEnter.append('g').attr('class', 'cells');
-      backgroundWrap = wrap.select('.background').attr('width', availableWidth).attr('height', availableHeight);
-      cellsWrap = wrap.select('.cells');
-      wrap.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
-      container.style({
-        'height': availableHeight + margin.top + margin.bottom + 'px',
-        'width': availableWidth + margin.left + margin.right + 'px'
+      wrap = container.selectAll('g.matrix').data([data]).enter().append('g').attr('class', 'wrapper matrix chart').append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+      backgroundWrap = wrap.append('rect').attr('class', 'background').attr('width', availableWidth).attr('height', availableHeight);
+      cellsWrap = wrap.append('g').attr('class', 'cells');
+      cell = cellsWrap.selectAll('.cell').data(data);
+      cell.attr('width', cellWidth).attr('height', cellHeight).style('fill', getCellColor).transition().duration(transitionDuration).attr('x', getCellX).attr('y', getCellY);
+      cell.exit().remove();
+      return cell.enter().append('rect').classed('cell', true).attr('height', cellHeight).attr('width', cellWidth).attr('x', getCellX).attr('y', getCellY).style('fill', getCellColor).on('click', function(d) {
+        return dispatch.call('cellClick', this, d);
+      }).on('dblclick', function(d) {
+        return dispatch.call('cellDblClick', this, d);
+      }).on('mouseover', function(d) {
+        return dispatch.call('cellMouseOver', this, d);
+      }).on('mouseout', function(d) {
+        return dispatch.call('cellMouseOut', this, d);
       });
-      cell = void 0;
-      chart.render = function() {
-        cell = cellsWrap.selectAll('.cell').data(data, function(d, i) {
-          if (d.id != null) {
-            return d.id;
-          } else {
-            return i;
-          }
-        });
-        cell.attr({
-          width: cellWidth,
-          height: cellHeight
-        }).style({
-          'fill': getCellColor
-        }).transition().duration(transitionDuration).attr({
-          'x': getCellX,
-          'y': getCellY
-        });
-        cell.enter().append('rect').classed({
-          'cell': true
-        }).transition().duration(transitionDuration).attr({
-          'width': cellWidth,
-          'height': cellHeight,
-          'x': getCellX,
-          'y': getCellY
-        }).style({
-          'fill': getCellColor
-        });
-        return cell.exit().remove();
-      };
-      chart.render();
-      cell.on('click', dispatch.cellClick).on('dblclick', dispatch.cellDblClick);
-      return cell.on('mouseover', dispatch.cellMouseOver).on('mouseout', dispatch.cellMouseOut);
     });
   };
   chart.xScale = xScale;

@@ -42,7 +42,7 @@ gulp.task 'demo:stylus', ['demo:clean'], ->
 
 gulp.task 'demo:copy', ['demo:clean', 'default'], ->
     gulp.src([
-        "node_modules/d3/*d3*.js"
+        "node_modules/d3/build/d3.min.js"
         "dist/**/*"
     ]).pipe(gulp.dest('demo'))
 
@@ -93,7 +93,7 @@ gulp.task 'serve', ->
 gulp.task 'test', ['default'], (done) ->
 
     files = [
-        "node_modules/d3/d3.min.js"
+        "node_modules/d3/build/d3.min.js"
         "src/*.coffee"
         "demo/*.coffee"
     ]
