@@ -1,6 +1,6 @@
 {
   "name": "kash-matrix",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Matrix based on d3",
   "main": "index.js",
   "author": "Alexander Kasheverov",
