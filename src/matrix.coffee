@@ -1,6 +1,6 @@
-window.Matrix = () ->
+window.KashMatrix = () ->
 
-# Public
+    # Public
     margin = top: 10, right: 10, bottom: 10, left: 10
     width = null
     height = null

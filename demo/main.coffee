@@ -5,7 +5,7 @@ onCellDblClick = (d)-> console.log 'dblclick', d
 onMouseOver = (d)-> console.log 'mouseOver', d
 onMouseOut = (d)-> console.log 'mouseOut', d
 
-matrix = window.Matrix()
+matrix = window.KashMatrix()
 matrix.dispatch
     .on('cellClick', onCellClick)
     .on('cellDblClick', onCellDblClick)

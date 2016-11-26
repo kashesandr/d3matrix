@@ -1,7 +1,7 @@
 {
-  "name": "cnm",
+  "name": "kash-matrix",
   "version": "0.0.1",
-  "description": "Cell network monitor",
+  "description": "Matrix based on d3",
   "main": "index.js",
   "author": "Alexander Kasheverov",
   "license": "",

@@ -1,6 +1,6 @@
 (function(window){
 "use strict";
-window.Matrix = function() {
+window.KashMatrix = function() {
   var chart, dispatch, getCellColor, height, margin, noData, transitionDuration, width, xScale, yScale;
   margin = {
     top: 10,
