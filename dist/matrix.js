@@ -23,6 +23,17 @@ window.KashMatrix = function() {
       var _getY, availableHeight, availableWidth, backgroundWrap, cell, cellHeight, cellWidth, cellsWrap, container, getCellX, getCellY, noDataText, range, sideLength, wrap;
       container = d3.select(this);
       chart.container = this;
+      if (data != null ? data.length : void 0) {
+        container.selectAll('.noData').remove();
+      } else {
+        container.selectAll('g').remove();
+        noDataText = container.selectAll('.no-data').data([noData]);
+        noDataText.enter().append('text').attr('class', 'no-data').attr('dy', '-.7em').style('text-anchor', 'middle');
+        noDataText.attr('x', margin.left + width / 2).attr('y', margin.top + width / 2).text(function(d) {
+          return d;
+        });
+        return chart;
+      }
       chart.update = function() {
         if (transitionDuration !== 0) {
           container.transition().duration(transitionDuration);
@@ -57,17 +68,6 @@ window.KashMatrix = function() {
       yScale.rangeRound([0, availableHeight]).domain(range);
       cellHeight = yScale.bandwidth();
       cellWidth = xScale.bandwidth();
-      if (data != null ? data.length : void 0) {
-        container.selectAll('.noData').remove();
-      } else {
-        container.selectAll('g').remove();
-        noDataText = container.selectAll('.no-data').data([noData]);
-        noDataText.enter().append('text').attr('class', 'no-data').attr('dy', '-.7em').style('text-anchor', 'middle');
-        noDataText.attr('x', margin.left + width / 2).attr('y', margin.top + width / 2).text(function(d) {
-          return d;
-        });
-        return chart;
-      }
       wrap = container.selectAll('g.matrix').data([data]).enter().append('g').attr('class', 'wrapper matrix chart').append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
       backgroundWrap = wrap.append('rect').attr('class', 'background').attr('width', availableWidth).attr('height', availableHeight);
       cellsWrap = wrap.append('g').attr('class', 'cells');

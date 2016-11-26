@@ -22,6 +22,16 @@ window.KashMatrix = () ->
 
             chart.container = this
 
+            # Display noData message if there's nothing to show.
+            if data?.length
+                container.selectAll('.noData').remove()
+            else
+                container.selectAll('g').remove()
+                noDataText = container.selectAll('.no-data').data([noData])
+                noDataText.enter().append('text').attr('class', 'no-data').attr('dy', '-.7em').style 'text-anchor', 'middle'
+                noDataText.attr('x', margin.left + width / 2).attr('y', margin.top + width / 2).text (d) -> d
+                return chart
+
             chart.update = ->
                 if transitionDuration isnt 0
                     container.transition().duration transitionDuration
@@ -63,16 +73,6 @@ window.KashMatrix = () ->
 
             cellHeight = yScale.bandwidth()
             cellWidth = xScale.bandwidth()
-
-            # Display noData message if there's nothing to show.
-            if data?.length
-                container.selectAll('.noData').remove()
-            else
-                container.selectAll('g').remove()
-                noDataText = container.selectAll('.no-data').data([noData])
-                noDataText.enter().append('text').attr('class', 'no-data').attr('dy', '-.7em').style 'text-anchor', 'middle'
-                noDataText.attr('x', margin.left + width / 2).attr('y', margin.top + width / 2).text (d) -> d
-                return chart
 
             wrap = container
                 .selectAll('g.matrix')
