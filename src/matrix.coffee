@@ -24,7 +24,7 @@ window.KashMatrix = () ->
 
             # Display noData message if there's nothing to show.
             if data?.length
-                container.selectAll('.noData').remove()
+                container.selectAll('.no-data').remove()
             else
                 container.selectAll('g').remove()
                 noDataText = container.selectAll('.no-data').data([noData])

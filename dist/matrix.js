@@ -24,7 +24,7 @@ window.KashMatrix = function() {
       container = d3.select(this);
       chart.container = this;
       if (data != null ? data.length : void 0) {
-        container.selectAll('.noData').remove();
+        container.selectAll('.no-data').remove();
       } else {
         container.selectAll('g').remove();
         noDataText = container.selectAll('.no-data').data([noData]);

@@ -12,4 +12,4 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "Installing node.js"
-nvm install && nvm use --delete-prefix v4.4.4
+nvm install && nvm use --delete-prefix v6.9.1
