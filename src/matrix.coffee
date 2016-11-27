@@ -12,7 +12,6 @@ window.KashMatrix = () ->
     dispatch = d3.dispatch(
         'renderEnd', 'cellClick', 'cellDblClick', 'cellMouseOver', 'cellMouseOut'
     )
-    transitionDuration = 500
     noData = 'No data provided.'
     #state = todo: add a state
 
@@ -33,8 +32,6 @@ window.KashMatrix = () ->
                 return chart
 
             chart.update = ->
-                if transitionDuration isnt 0
-                    container.transition().duration transitionDuration
                 container.call chart
                 return
 
@@ -90,16 +87,16 @@ window.KashMatrix = () ->
             cellsWrap = wrap
                 .append('g')
                 .attr 'class', 'cells'
+            cellsWrap = container.select '.cells'
 
-            cell = cellsWrap.selectAll('.cell').data(data)
+            cell = cellsWrap.selectAll('.cell').data(data, (item)->item)
+            console.log cell.enter()
 
             # update
             cell
                 .attr('width', cellWidth)
                 .attr('height', cellHeight)
                 .style('fill', getCellColor)
-                .transition()
-                .duration(transitionDuration)
                 .attr('x', getCellX)
                 .attr('y', getCellY)
 
@@ -150,12 +147,6 @@ window.KashMatrix = () ->
         if !arguments.length
             return cellColor
         cellColor = _
-        chart
-
-    chart.transitionDuration = (_) ->
-        if !arguments.length
-            return transitionDuration
-        transitionDuration = _
         chart
 
     chart.noData = (_) ->

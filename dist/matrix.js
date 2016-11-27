@@ -1,7 +1,7 @@
 (function(window){
 "use strict";
 window.KashMatrix = function() {
-  var chart, dispatch, getCellColor, height, margin, noData, transitionDuration, width, xScale, yScale;
+  var chart, dispatch, getCellColor, height, margin, noData, width, xScale, yScale;
   margin = {
     top: 10,
     right: 10,
@@ -16,7 +16,6 @@ window.KashMatrix = function() {
   xScale = d3.scaleBand();
   yScale = d3.scaleBand();
   dispatch = d3.dispatch('renderEnd', 'cellClick', 'cellDblClick', 'cellMouseOver', 'cellMouseOut');
-  transitionDuration = 500;
   noData = 'No data provided.';
   chart = function(selection) {
     return selection.each(function(data) {
@@ -35,9 +34,6 @@ window.KashMatrix = function() {
         return chart;
       }
       chart.update = function() {
-        if (transitionDuration !== 0) {
-          container.transition().duration(transitionDuration);
-        }
         container.call(chart);
       };
       sideLength = Math.ceil(Math.sqrt(data.length));
@@ -71,8 +67,12 @@ window.KashMatrix = function() {
       wrap = container.selectAll('g.matrix').data([data]).enter().append('g').attr('class', 'wrapper matrix chart').append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
       backgroundWrap = wrap.append('rect').attr('class', 'background').attr('width', availableWidth).attr('height', availableHeight);
       cellsWrap = wrap.append('g').attr('class', 'cells');
-      cell = cellsWrap.selectAll('.cell').data(data);
-      cell.attr('width', cellWidth).attr('height', cellHeight).style('fill', getCellColor).transition().duration(transitionDuration).attr('x', getCellX).attr('y', getCellY);
+      cellsWrap = container.select('.cells');
+      cell = cellsWrap.selectAll('.cell').data(data, function(item) {
+        return item;
+      });
+      console.log(cell.enter());
+      cell.attr('width', cellWidth).attr('height', cellHeight).style('fill', getCellColor).attr('x', getCellX).attr('y', getCellY);
       cell.exit().remove();
       return cell.enter().append('rect').classed('cell', true).attr('height', cellHeight).attr('width', cellWidth).attr('x', getCellX).attr('y', getCellY).style('fill', getCellColor).on('click', function(d) {
         return dispatch.call('cellClick', this, d);
@@ -118,13 +118,6 @@ window.KashMatrix = function() {
       return cellColor;
     }
     cellColor = _;
-    return chart;
-  };
-  chart.transitionDuration = function(_) {
-    if (!arguments.length) {
-      return transitionDuration;
-    }
-    transitionDuration = _;
     return chart;
   };
   chart.noData = function(_) {
