@@ -90,7 +90,6 @@ window.KashMatrix = () ->
             cellsWrap = container.select '.cells'
 
             cell = cellsWrap.selectAll('.cell').data(data, (item)->item)
-            console.log cell.enter()
 
             # update
             cell

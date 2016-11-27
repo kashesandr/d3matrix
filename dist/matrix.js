@@ -71,7 +71,6 @@ window.KashMatrix = function() {
       cell = cellsWrap.selectAll('.cell').data(data, function(item) {
         return item;
       });
-      console.log(cell.enter());
       cell.attr('width', cellWidth).attr('height', cellHeight).style('fill', getCellColor).attr('x', getCellX).attr('y', getCellY);
       cell.exit().remove();
       return cell.enter().append('rect').classed('cell', true).attr('height', cellHeight).attr('width', cellWidth).attr('x', getCellX).attr('y', getCellY).style('fill', getCellColor).on('click', function(d) {
